@@ -1,114 +1,269 @@
 import React from "react";
 
-const TemplateRenderer = ({ template }) => {
+const TemplateRenderer = ({ template, onUpdate }) => {
+    const handleChange = (field, value) => {
+        const updatedTemplate = { ...template, [field]: value };
+        onUpdate(updatedTemplate);
+    };
+
+    const handleItemChange = (index, field, value) => {
+        const updatedItems = [...template.items];
+        updatedItems[index] = {
+            ...updatedItems[index],
+            [field]: value,
+        };
+        const updatedTemplate = { ...template, items: updatedItems };
+        onUpdate(updatedTemplate);
+    };
+
+    const handleNestedChange = (field, subField, value) => {
+        const updatedTemplate = {
+            ...template,
+            [field]: {
+                ...template[field],
+                [subField]: value,
+            },
+        };
+        onUpdate(updatedTemplate);
+    };
+
+
     const renderTemplate = () => {
         switch (template.type) {
             case "simpleText":
-                return <p>{template.text}</p>;
+                return (
+                    <div>
+                        <label>Text:</label>
+                        <input
+                            type="text"
+                            value={template.text || ""}
+                            onChange={(e) => handleChange("text", e.target.value)}
+                            style={{ width: "100%", margin: "5px 0" }}
+                        />
+                    </div>
+                );
             case "simpleImage":
                 return (
-                    <img
-                        src={template.imageUrl}
-                        alt={template.altText || "Image"}
-                        style={{ maxWidth: "100%" }}
-                    />
+                    <div>
+                        <label>Image URL:</label>
+                        <input
+                            type="text"
+                            value={template.imageUrl || ""}
+                            onChange={(e) => handleChange("imageUrl", e.target.value)}
+                            style={{ width: "100%", margin: "5px 0" }}
+                        />
+                        <label>Alt Text:</label>
+                        <input
+                            type="text"
+                            value={template.altText || ""}
+                            onChange={(e) => handleChange("altText", e.target.value)}
+                            style={{ width: "100%", margin: "5px 0" }}
+                        />
+                    </div>
                 );
             case "basicCard":
                 return (
-                    <div style={{ border: "1px solid #ccc", padding: "10px", borderRadius: "5px" }}>
-                        <h4>{template.title}</h4>
-                        <p>{template.description}</p>
-                        {template.thumbnail && (
-                            <img
-                                src={template.thumbnail.imageUrl}
-                                alt="Thumbnail"
-                                style={{ maxWidth: "100px" }}
-                            />
-                        )}
-                        {template.buttons &&
-                            template.buttons.map((button, idx) => (
-                                <button key={idx} onClick={() => window.open(button.webLinkUrl)}>
-                                    {button.label}
-                                </button>
-                            ))}
+                    <div>
+                        <label>Title:</label>
+                        <input
+                            type="text"
+                            value={template.title || ""}
+                            onChange={(e) => handleChange("title", e.target.value)}
+                            style={{ width: "100%", margin: "5px 0" }}
+                        />
+                        <label>Description:</label>
+                        <input
+                            type="text"
+                            value={template.description || ""}
+                            onChange={(e) => handleChange("description", e.target.value)}
+                            style={{ width: "100%", margin: "5px 0" }}
+                        />
+                    </div>
+                );
+            case "textCard":
+                return (
+                    <div>
+                        <label>Text:</label>
+                        <input
+                            type="text"
+                            value={template.text || ""}
+                            onChange={(e) => handleChange("text", e.target.value)}
+                            style={{ width: "100%", margin: "5px 0" }}
+                        />
+                        <label>Description:</label>
+                        <input
+                            type="text"
+                            value={template.description || ""}
+                            onChange={(e) => handleChange("description", e.target.value)}
+                            style={{ width: "100%", margin: "5px 0" }}
+                        />
+                    </div>
+                );
+            case "imageCard":
+                return (
+                    <div>
+                        <label>Image URL:</label>
+                        <input
+                            type="text"
+                            value={template.imageUrl || ""}
+                            onChange={(e) => handleChange("imageUrl", e.target.value)}
+                            style={{ width: "100%", margin: "5px 0" }}
+                        />
+                        <label>Description:</label>
+                        <input
+                            type="text"
+                            value={template.description || ""}
+                            onChange={(e) => handleChange("description", e.target.value)}
+                            style={{ width: "100%", margin: "5px 0" }}
+                        />
                     </div>
                 );
             case "listCard":
                 return (
                     <div>
-                        <h4>{template.header.title}</h4>
-                        {template.header.imageUrl && (
-                            <img
-                                src={template.header.imageUrl}
-                                alt="Header Image"
-                                style={{ maxWidth: "100px" }}
-                            />
-                        )}
-                        {template.items &&
-                            template.items.map((item, idx) => (
-                                <div key={idx} style={{ marginBottom: "10px" }}>
-                                    <h5>{item.title}</h5>
-                                    <p>{item.description}</p>
-                                    {item.imageUrl && (
-                                        <img
-                                            src={item.imageUrl}
-                                            alt="Item Image"
-                                            style={{ maxWidth: "50px" }}
-                                        />
-                                    )}
-                                </div>
-                            ))}
-                        {template.buttons &&
-                            template.buttons.map((button, idx) => (
-                                <button key={idx} onClick={() => window.open(button.webLinkUrl)}>
-                                    {button.label}
-                                </button>
-                            ))}
+                        {/* Header Section */}
+                        <h4>Header</h4>
+                        <label>Header Title:</label>
+                        <input
+                            type="text"
+                            value={template.header?.title || ""}
+                            onChange={(e) => handleNestedChange("header", "title", e.target.value)}
+                            style={{ width: "100%", margin: "5px 0" }}
+                        />
+                        <label>Header Image URL:</label>
+                        <input
+                            type="text"
+                            value={template.header?.imageUrl || ""}
+                            onChange={(e) => handleNestedChange("header", "imageUrl", e.target.value)}
+                            style={{ width: "100%", margin: "5px 0" }}
+                        />
+
+                        {/* Items Section */}
+                        <h4>Items</h4>
+                        {template.items?.map((item, index) => (
+                            <div key={index} style={{ marginBottom: "10px", paddingLeft: "10px" }}>
+                                <label>Item {index + 1} Title:</label>
+                                <input
+                                    type="text"
+                                    value={item.title || ""}
+                                    onChange={(e) => handleItemChange(index, "title", e.target.value)}
+                                    style={{ width: "100%", margin: "5px 0" }}
+                                />
+                                <label>Item {index + 1} Description:</label>
+                                <input
+                                    type="text"
+                                    value={item.description || ""}
+                                    onChange={(e) => handleItemChange(index, "description", e.target.value)}
+                                    style={{ width: "100%", margin: "5px 0" }}
+                                />
+                                <label>Item {index + 1} Image URL:</label>
+                                <input
+                                    type="text"
+                                    value={item.imageUrl || ""}
+                                    onChange={(e) => handleItemChange(index, "imageUrl", e.target.value)}
+                                    style={{ width: "100%", margin: "5px 0" }}
+                                />
+                            </div>
+                        ))}
+
+                        {/* Buttons Section */}
+                        <h4>Buttons</h4>
+                        {template.buttons?.map((button, index) => (
+                            <div key={index} style={{ marginBottom: "10px" }}>
+                                <label>Button {index + 1} Label:</label>
+                                <input
+                                    type="text"
+                                    value={button.label || ""}
+                                    onChange={(e) => {
+                                        const updatedButtons = [...template.buttons];
+                                        updatedButtons[index] = { ...updatedButtons[index], label: e.target.value };
+                                        onUpdate({ ...template, buttons: updatedButtons });
+                                    }}
+                                    style={{ width: "100%", margin: "5px 0" }}
+                                />
+                                <label>Button {index + 1} URL:</label>
+                                <input
+                                    type="text"
+                                    value={button.webLinkUrl || ""}
+                                    onChange={(e) => {
+                                        const updatedButtons = [...template.buttons];
+                                        updatedButtons[index] = { ...updatedButtons[index], webLinkUrl: e.target.value };
+                                        onUpdate({ ...template, buttons: updatedButtons });
+                                    }}
+                                    style={{ width: "100%", margin: "5px 0" }}
+                                />
+                            </div>
+                        ))}
                     </div>
                 );
             case "itemCard":
                 return (
                     <div>
-                        <h4>{template.head.title}</h4>
-                        <p>{template.head.description}</p>
-                        {template.items &&
-                            template.items.map((item, idx) => (
-                                <div key={idx}>
-                                    <h5>{item.title}</h5>
-                                    <p>{item.description}</p>
-                                </div>
-                            ))}
-                        {template.buttons &&
-                            template.buttons.map((button, idx) => (
-                                <button key={idx} onClick={() => window.open(button.webLinkUrl)}>
-                                    {button.label}
-                                </button>
-                            ))}
-                    </div>
-                );
-            case "commerceCard":
-                return (
-                    <div style={{ border: "1px solid #ccc", padding: "10px", borderRadius: "5px" }}>
-                        <h4>{template.description}</h4>
-                        <p>
-                            Price: {template.price} {template.currency}
-                        </p>
-                        {template.discount > 0 && <p>Discount: {template.discount}%</p>}
-                        {template.thumbnails &&
-                            template.thumbnails.map((thumbnail, idx) => (
-                                <img
-                                    key={idx}
-                                    src={thumbnail.imageUrl}
-                                    alt="Thumbnail"
-                                    style={{ maxWidth: "100px" }}
+                        {/* Head Section */}
+                        <label>Head Title:</label>
+                        <input
+                            type="text"
+                            value={template.head?.title || ""}
+                            onChange={(e) => handleNestedChange("head", "title", e.target.value)}
+                            style={{ width: "100%", margin: "5px 0" }}
+                        />
+                        <label>Head Description:</label>
+                        <input
+                            type="text"
+                            value={template.head?.description || ""}
+                            onChange={(e) => handleNestedChange("head", "description", e.target.value)}
+                            style={{ width: "100%", margin: "5px 0" }}
+                        />
+
+                        {/* Items Section */}
+                        <h4>Items</h4>
+                        {template.items?.map((item, index) => (
+                            <div key={index} style={{ marginBottom: "10px", paddingLeft: "10px" }}>
+                                <label>Item {index + 1} Title:</label>
+                                <input
+                                    type="text"
+                                    value={item.title || ""}
+                                    onChange={(e) => handleItemChange(index, "title", e.target.value)}
+                                    style={{ width: "100%", margin: "5px 0" }}
                                 />
-                            ))}
-                        {template.buttons &&
-                            template.buttons.map((button, idx) => (
-                                <button key={idx} onClick={() => window.open(button.webLinkUrl)}>
-                                    {button.label}
-                                </button>
-                            ))}
+                                <label>Item {index + 1} Description:</label>
+                                <input
+                                    type="text"
+                                    value={item.description || ""}
+                                    onChange={(e) => handleItemChange(index, "description", e.target.value)}
+                                    style={{ width: "100%", margin: "5px 0" }}
+                                />
+                            </div>
+                        ))}
+
+                        {/* Buttons Section */}
+                        <h4>Buttons</h4>
+                        {template.buttons?.map((button, index) => (
+                            <div key={index} style={{ marginBottom: "10px" }}>
+                                <label>Button {index + 1} Label:</label>
+                                <input
+                                    type="text"
+                                    value={button.label || ""}
+                                    onChange={(e) => {
+                                        const updatedButtons = [...template.buttons];
+                                        updatedButtons[index] = { ...updatedButtons[index], label: e.target.value };
+                                        onUpdate({ ...template, buttons: updatedButtons });
+                                    }}
+                                    style={{ width: "100%", margin: "5px 0" }}
+                                />
+                                <label>Button {index + 1} URL:</label>
+                                <input
+                                    type="text"
+                                    value={button.webLinkUrl || ""}
+                                    onChange={(e) => {
+                                        const updatedButtons = [...template.buttons];
+                                        updatedButtons[index] = { ...updatedButtons[index], webLinkUrl: e.target.value };
+                                        onUpdate({ ...template, buttons: updatedButtons });
+                                    }}
+                                    style={{ width: "100%", margin: "5px 0" }}
+                                />
+                            </div>
+                        ))}
                     </div>
                 );
             default:

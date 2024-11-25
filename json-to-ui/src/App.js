@@ -118,6 +118,7 @@ const jsonExamples = {
 
 const App = () => {
     const [jsonInput, setJsonInput] = useState(JSON.stringify(jsonExamples.simpleText, null, 2));
+    const [parsedJson, setParsedJson] = useState(jsonExamples.simpleText);
     const [error, setError] = useState("");
 
     const handleJsonChange = (e) => {
@@ -125,7 +126,8 @@ const App = () => {
         setJsonInput(value);
 
         try {
-            JSON.parse(value);
+            const parsed = JSON.parse(value);
+            setParsedJson(parsed);
             setError("");
         } catch (err) {
             setError("Invalid JSON format");
@@ -135,15 +137,13 @@ const App = () => {
     const handleExampleSelect = (exampleKey) => {
         const selectedExample = jsonExamples[exampleKey];
         setJsonInput(JSON.stringify(selectedExample, null, 2));
+        setParsedJson(selectedExample);
     };
 
-    const parsedJson = (() => {
-        try {
-            return JSON.parse(jsonInput);
-        } catch {
-            return null;
-        }
-    })();
+    const handleUpdateFromUI = (updatedData) => {
+        setParsedJson(updatedData);
+        setJsonInput(JSON.stringify(updatedData, null, 2));
+    };
 
     return (
         <div className="app">
@@ -170,11 +170,7 @@ const App = () => {
             </div>
             <div className="ui-preview">
                 <h3>UI Preview</h3>
-                {parsedJson ? (
-                    <TemplateRenderer template={parsedJson} />
-                ) : (
-                    <p>Please provide valid JSON to preview</p>
-                )}
+                <TemplateRenderer template={parsedJson} onUpdate={handleUpdateFromUI} />
             </div>
         </div>
     );

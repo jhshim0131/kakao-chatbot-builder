@@ -1,0 +1,26 @@
+{
+  "type": "listCard",
+  "header": {
+    "title": "List Card Header",
+    "imageUrl": "https://via.placeholder.com/100"
+  },
+  "items": [
+    {
+      "title": "Item 1",
+      "description": "Description of item 1",
+      "imageUrl": "https://via.placeholder.com/50"
+    },
+    {
+      "title": "Item 2",
+      "description": "Description of item 2",
+      "imageUrl": "https://via.placeholder.com/50"
+    }
+  ],
+  "buttons": [
+    {
+      "action": "webLink",
+      "label": "View More",
+      "webLinkUrl": "https://example.com"
+    }
+  ]
+}
