@@ -1,0 +1,42 @@
+.app {
+  display: flex;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.json-editor,
+.ui-preview {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.example-buttons button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.json-editor textarea {
+  width: 100%;
+  height: 90%;
+  font-family: monospace;
+  font-size: 14px;
+}
+
+.ui-preview {
+  background-color: #f9f9f9;
+  border-left: 1px solid #ddd;
+}
+
+h3 {
+  margin-bottom: 10px;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+}
