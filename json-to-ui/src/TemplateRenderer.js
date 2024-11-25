@@ -33,11 +33,31 @@ const TemplateRenderer = ({ template }) => {
                             ))}
                     </div>
                 );
-            case "textCard":
+            case "listCard":
                 return (
-                    <div style={{ border: "1px solid #ccc", padding: "10px", borderRadius: "5px" }}>
-                        <h4>{template.text}</h4>
-                        <p>{template.description}</p>
+                    <div>
+                        <h4>{template.header.title}</h4>
+                        {template.header.imageUrl && (
+                            <img
+                                src={template.header.imageUrl}
+                                alt="Header Image"
+                                style={{ maxWidth: "100px" }}
+                            />
+                        )}
+                        {template.items &&
+                            template.items.map((item, idx) => (
+                                <div key={idx} style={{ marginBottom: "10px" }}>
+                                    <h5>{item.title}</h5>
+                                    <p>{item.description}</p>
+                                    {item.imageUrl && (
+                                        <img
+                                            src={item.imageUrl}
+                                            alt="Item Image"
+                                            style={{ maxWidth: "50px" }}
+                                        />
+                                    )}
+                                </div>
+                            ))}
                         {template.buttons &&
                             template.buttons.map((button, idx) => (
                                 <button key={idx} onClick={() => window.open(button.webLinkUrl)}>
@@ -46,27 +66,23 @@ const TemplateRenderer = ({ template }) => {
                             ))}
                     </div>
                 );
-            case "imageCard":
-                return (
-                    <div style={{ textAlign: "center", padding: "10px" }}>
-                        <img
-                            src={template.imageUrl}
-                            alt={template.altText || "Image"}
-                            style={{ maxWidth: "100%" }}
-                        />
-                        <p>{template.description}</p>
-                    </div>
-                );
-            case "listCard":
+            case "itemCard":
                 return (
                     <div>
-                        <h4>{template.header.title}</h4>
+                        <h4>{template.head.title}</h4>
+                        <p>{template.head.description}</p>
                         {template.items &&
                             template.items.map((item, idx) => (
-                                <div key={idx} style={{ marginBottom: "10px" }}>
+                                <div key={idx}>
                                     <h5>{item.title}</h5>
                                     <p>{item.description}</p>
                                 </div>
+                            ))}
+                        {template.buttons &&
+                            template.buttons.map((button, idx) => (
+                                <button key={idx} onClick={() => window.open(button.webLinkUrl)}>
+                                    {button.label}
+                                </button>
                             ))}
                     </div>
                 );
@@ -77,7 +93,7 @@ const TemplateRenderer = ({ template }) => {
                         <p>
                             Price: {template.price} {template.currency}
                         </p>
-                        {template.discount > 0 && <p>Discount: {template.discount}</p>}
+                        {template.discount > 0 && <p>Discount: {template.discount}%</p>}
                         {template.thumbnails &&
                             template.thumbnails.map((thumbnail, idx) => (
                                 <img
