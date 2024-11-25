@@ -6,6 +6,13 @@ A React-based template builder that allows you to create and preview Kakao Chatb
 ## Table of Contents
 - [Features](#features)
 - [Supported Templates](#supported-templates)
+  - [Simple Text](#1-simple-text)
+  - [Simple Image](#2-simple-image)
+  - [Basic Card](#3-basic-card)
+  - [List Card](#4-list-card)
+  - [Item Card](#5-item-card)
+  - [Commerce Card](#6-commerce-card)
+  - [Text Card](#7-text-card)
 - [How to Use](#how-to-use)
 - [Getting Started](#getting-started)
 - [Contributing](#contributing)
@@ -122,6 +129,17 @@ Displays a commerce item with a title, description, image, and price.
     }
   }
   
+
+### 7. Text Card
+Displays a card with a title and text content.
+
+- **JSON Example**:
+  ```json
+  {
+    "type": "textCard",
+    "title": "Text Card Title",
+    "description": "Text Card Description"
+  }
 ---
 
 
@@ -181,7 +199,7 @@ Contributions are welcome! To contribute:
 ---
 
 ## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE.txt) file for details.
 
 ---
 
