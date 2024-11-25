@@ -1,0 +1,12 @@
+{
+    "type": "textCard",
+    "text": "Welcome to Kakao Work!",
+    "description": "This is an example of a Text Card template.",
+    "buttons": [
+    {
+        "action": "webLink",
+        "label": "Learn More",
+        "webLinkUrl": "https://www.kakao.com"
+    }
+]
+}
